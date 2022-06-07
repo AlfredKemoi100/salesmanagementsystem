@@ -1,0 +1,22 @@
+.container{
+     background-color: black;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    margin-top: 5%;
+}
+.col-4{
+ align-items: flex-start;
+  background-color: black;
+ margin-right: 5%;
+}
+.col-8{
+align-items: flex-end;
+margin-left: 50%;
+align-items: center;
+align-content: center;
+background-color: yellow;
+
+
+
+}
