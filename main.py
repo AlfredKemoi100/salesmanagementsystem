@@ -13,7 +13,7 @@ app = Flask(__name__)
 #conn=psycopg2.connect(user="postgres",password="12345",
 #host="127.0.0.1",port="5432",database="myduka")
 conn=psycopg2.connect(user="svvdghcjnmuxaw",password="cd6fedb0da66fe4516cb59dcb8ce65cb4089ba9f6f15902b511ffe03e2abe93f",
-host="127.0.0.1",port="5432",database="d5p7thrhgluvt8")
+host="ec2-3-248-121-12.eu-west-1.compute.amazonaws.com",port="5432",database="d5p7thrhgluvt8")
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS products (id serial PRIMARY KEY,name VARCHAR(100),buying_price INT,selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales (id serial PRIMARY KEY,pid INT, quantity INT, created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(), FOREIGN KEY(pid) REFERENCES products(id) ON DELETE CASCADE);")
