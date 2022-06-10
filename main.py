@@ -1,15 +1,10 @@
-
 #we import the flask class and the render templaate function to help us load HTML files in routes
-
-
-
 
 from cProfile import label
 from flask import Flask, redirect, render_template,request,redirect
 import psycopg2
 
 app = Flask(__name__)
-
 #conn=psycopg2.connect(user="postgres",password="12345",
 #host="127.0.0.1",port="5432",database="myduka")
 conn=psycopg2.connect(user="svvdghcjnmuxaw",password="cd6fedb0da66fe4516cb59dcb8ce65cb4089ba9f6f15902b511ffe03e2abe93f",
@@ -24,10 +19,6 @@ def home():
     #return a HTML file
     hello = "hello Freddy"
     return render_template("index.html",h=hello)
-
-
-
-
 
 #@app.route("/sales")
 #def sales():
@@ -47,9 +38,6 @@ def form():
         print(first_name) 
         print(last_name) 
         return redirect("/form_true") 
-
-
-
 
 @app.route("/products",methods = ['POST','GET'])
 def form_data():
@@ -94,13 +82,9 @@ def sale(id):
     sales=cur.fetchall()
     return render_template("sales.html",sales=sales)  
 
-
-
-
 #alterenative insert query
 # cur.execute("INSERT INTO products (id,name,buying_price,selling_price,stock_quantity)
 # VALUES (%s,%s,%s,%s,%s,)",(id,name,buying_price,selling_price,stock_quantity))               
-
    
 @app.route("/dashboard")
 def dashboard():
@@ -126,11 +110,8 @@ def dashboard():
     #     datasets: [{
     #      label: 'profit per products',
     #      data:{{profit| tojson}}
-                
-
-       
-    
-if __name__==__main__:
-    app.run(port=22)
+                   
+if __name__== "__main__":
+    app.run(port=5080)
 
 
