@@ -130,7 +130,7 @@ def dashboard():
 
        
     
-
-app.run(port=22)
+if __name__==__main__:
+    app.run(port=22)
 
 
