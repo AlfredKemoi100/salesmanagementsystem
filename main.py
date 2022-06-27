@@ -104,6 +104,14 @@ def dashboard():
     print(product_name)      
     return render_template("dashboard.html",product_name=product_name,profit=profit)
 
+@app.route('/delete/<int:id>')
+def product_delete(id):
+    id=id
+    cur.execute("""delete from products where id=%(id)s""",{"id":id})
+    conn.commit()
+    return redirect('/products')
+
+
     # #inside the graph html change to the following
     # data: {
     #      labels:{{products_name| tojson}},

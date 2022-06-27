@@ -58,7 +58,7 @@
           </ul>
         </div>
        </div>
-       <div class="col-8" style="margin-left:10%; background-color: rgb(135, 232, 235); align-content: center;" >
+       <div class="col-8" style="margin-left:10%; align-content: center;" >
          <div class="col-6">
             <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -109,6 +109,7 @@
                 <th scope="col">stock quantity</th>
                 <th scope="col">sales</th>
                 <th scope="col">view sale</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -152,6 +153,9 @@
                 </td>
                 <td>
                   <a class="btn btn-primary" href="/sales/{{product[0]}}" role="button">view sale</a>
+                </td>
+                <td>
+                  <a class="btn btn-primary" href="/delete/{{product[0]}}" role="button">Delete</a>
                 </td>
               </tr>
               {% endfor %}
