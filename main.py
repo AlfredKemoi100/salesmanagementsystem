@@ -65,7 +65,19 @@ def form_data():
 def sales():
     if request.method=='POST':
         quantity=request.form['quantity']
+        quantity=(int(quantity))
         pid=request.form['pid']
+        cur.execute( """select stock_quantity from products where id=%(pid)s""",{"pid":pid})
+        current_quantity=cur.fetchone()
+        print(current_quantity)
+        print(type(current_quantity))
+        print(type(current_quantity[0]))
+        current_quantity=current_quantity[0]
+        stock_quantity=current_quantity-quantity
+        print(stock_quantity)
+        cur.execute("""update products set stock_quantity=%(stock_quantity)s where id=%(pid)s""", {"pid":pid, "stock_quantity": stock_quantity})
+        # print(type(current_quantity))
+        
         cur.execute("INSERT INTO sales (pid,quantity) VALUES(%s,%s)",(pid,quantity))
         conn.commit()
         return redirect("/products")
@@ -74,6 +86,7 @@ def sales():
         sales=cur.fetchall()
         print(sales)
         return render_template("sales.html",sales=sales)
+        
 
 @app.route("/sales/<int:id>")
 def sale(id):
