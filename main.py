@@ -1,14 +1,15 @@
 #we import the flask class and the render templaate function to help us load HTML files in routes
 
 from cProfile import label
+import termios
 from flask import Flask, redirect, render_template,request,redirect
 import psycopg2
 
 app = Flask(__name__)
 #conn=psycopg2.connect(user="postgres",password="12345",
 #host="127.0.0.1",port="5432",database="myduka")
-conn=psycopg2.connect(user="svvdghcjnmuxaw",password="cd6fedb0da66fe4516cb59dcb8ce65cb4089ba9f6f15902b511ffe03e2abe93f",
-host="ec2-3-248-121-12.eu-west-1.compute.amazonaws.com",port="5432",database="d5p7thrhgluvt8")
+conn=psycopg2.connect(user="rwutkwhzpqpasv",password="db2c720f6a8041c1689d37f6aa37793b0b28b5067f45d3aa3c274add0bd0d629",
+host="ec2-34-241-90-235.eu-west-1.compute.amazonaws.com",port="5432",database="d80lnmj6o22u6i")
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS products (id serial PRIMARY KEY,name VARCHAR(100),buying_price INT,selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales (id serial PRIMARY KEY,pid INT, quantity INT, created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(), FOREIGN KEY(pid) REFERENCES products(id) ON DELETE CASCADE);")
@@ -124,7 +125,7 @@ def product_delete(id):
     conn.commit()
     return redirect('/products')
 
-
+    
     # #inside the graph html change to the following
     # data: {
     #      labels:{{products_name| tojson}},
