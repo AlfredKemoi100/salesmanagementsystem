@@ -1,21 +1,76 @@
 #we import the flask class and the render templaate function to help us load HTML files in routes
 
 from cProfile import label
-import termios
-from flask import Flask, redirect, render_template,request,redirect
+
+from flask import Flask, redirect, render_template,request, session, url_for
 import psycopg2
+import re
+from datetime import timedelta
+# from models import db, Users
 
 app = Flask(__name__)
-#conn=psycopg2.connect(user="postgres",password="12345",
-#host="127.0.0.1",port="5432",database="myduka")
-conn=psycopg2.connect(user="rwutkwhzpqpasv",password="db2c720f6a8041c1689d37f6aa37793b0b28b5067f45d3aa3c274add0bd0d629",
-host="ec2-34-241-90-235.eu-west-1.compute.amazonaws.com",port="5432",database="d80lnmj6o22u6i")
+app.config["SECRET_KEY"] = "freddy100"
+app.permanent_session_lifetime= timedelta(minutes=5)
+
+conn=psycopg2.connect(user="postgres",password="12345", host="127.0.0.1",port="5432",database="myduka")
+# conn=psycopg2.connect(user="rwutkwhzpqpasv",password="db2c720f6a8041c1689d37f6aa37793b0b28b5067f45d3aa3c274add0bd0d629",
+# host="ec2-34-241-90-235.eu-west-1.compute.amazonaws.com",port="5432",database="d80lnmj6o22u6i")
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS products (id serial PRIMARY KEY,name VARCHAR(100),buying_price INT,selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales (id serial PRIMARY KEY,pid INT, quantity INT, created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(), FOREIGN KEY(pid) REFERENCES products(id) ON DELETE CASCADE);")
 conn.commit()
 
+cur.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY,username VARCHAR(100),email VARCHAR(100),password VARCHAR(100));")
+conn.commit()
+
+@app.route("/register",methods = ['POST','GET'])
+def register():
+    if request.method =='POST':
+        username = request.form['username']
+        email = request.form['email'] 
+        password = request.form['password']
+        print('hi')
+        cur.execute("""INSERT INTO users (username,email,password) VALUES(%(un)s,%(em)s,%(ps)s)""",{"un":username,"em":email,"ps":password})
+        conn.commit()
+        return redirect(url_for('login'))
+    else:
+        return render_template("register.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        cur.execute("SELECT * FROM users WHERE username= %s and password= %s", (username,password))
+        record= cur.fetchone()
+        
+        if record:
+            pw= record[3]
+            if pw== password:
+                session.permanent= True   
+                # session['loggedin']= True
+                session['username']= record[1]
+                session['id']= record[0]
+                return redirect(url_for('home'))    
+            else:
+                return redirect(url_for('login'))
+        else:
+            return redirect(url_for('register'))
+    return render_template('login.html')       
+
+# @app.route('/logout')
+# def logout():
+#     session.pop('loggedin',None)
+#     session.pop('username',None) 
+#     return redirect(url_for('login'))   
+
 @app.route("/")
+def home1():
+    #return a HTML file
+    hello = "hello Freddy"
+    return render_template("index.html",h=hello)
+
+@app.route("/home")
 def home():
     #return a HTML file
     hello = "hello Freddy"
@@ -125,14 +180,39 @@ def product_delete(id):
     conn.commit()
     return redirect('/products')
 
-    
     # #inside the graph html change to the following
     # data: {
     #      labels:{{products_name| tojson}},
     #     datasets: [{
     #      label: 'profit per products',
     #      data:{{profit| tojson}}
-                   
+    
+@app.route("/edit_product/<int:x>", methods=["POST", "GET"])
+def edit_product(x):
+   
+    if request.method == "POST":
+        name = request.form['name']
+        buying_price = request.form['bprice'] 
+        selling_price = request.form['sprice']
+        stock_quantity = request.form['qt']
+        print (request.form)
+        cur.execute(
+            "UPDATE products SET name = %(name)s, buying_price = %(bprice)s, selling_price = %(sprice)s, stock_quantity = %(qt)s WHERE id=%(x)s",
+            {"x":x,"name":name,"bprice":buying_price,"sprice":selling_price,"qt":stock_quantity}
+        )
+        conn.commit()
+        return redirect(url_for("dashboard"))
+    else:   
+        return render_template("home")
+
+# @app.route("/print")
+# def task():
+#     hi = "hello world"
+#     print(hi) 
+#     return render_template("index.html",h=hi)       
+
+
+
 if __name__== "__main__":
     app.run(port=5080)
 

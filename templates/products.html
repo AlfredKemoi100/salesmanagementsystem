@@ -110,6 +110,8 @@
                 <th scope="col">sales</th>
                 <th scope="col">view sale</th>
                 <th>Delete</th>
+                <th>Edit</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -156,6 +158,43 @@
                 </td>
                 <td>
                   <a class="btn btn-primary" href="/delete/{{product[0]}}" role="button">Delete</a>
+                </td>
+                <td>
+                  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal5">
+  edit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">product_edit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal3" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...<form action="/edit_product/{{product[0]}}" method="post">
+          <label for="id">id:</label><br>
+          <input type="hidden" id="id" name="id" value="{{product[0]}}"><br>
+          <label for="name">name:</label><br>
+          <input type="text" id="name" name="name" value="{{product[1]}}"><br><br>
+          <label for="bprice">buying_price:</label><br>
+          <input type="text" id="bprice" name="bprice" value="{{product[2]}}"><br><br>
+          <label for="sprice">selling_price:</label><br>
+          <input type="text" id="sprice" name="sprice" value="{{product[3]}}"><br><br>
+          <label for="qt">stock_quantity:</label><br>
+          <input type="text" id="qt" name="qt" value="{{product[4]}}"><br><br>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
                 </td>
               </tr>
               {% endfor %}
